@@ -1,13 +1,11 @@
-import * as _ from "lodash"
+import * as _ from "lodash";
+import * as util from "./util";
 
-const FindValueAt = (board:number[][], value:number){
-  for(let i = 0; i < board.length; i++){
-    for(let j = 0; j < board[0].length; j++){
-      if(board[i][j] === value){
-        return [i, j];
-      }
-    }
-  } 
+enum Direction {
+  Up = 1,
+  Down,
+  Left,
+  Right,
 }
 
 
@@ -19,8 +17,29 @@ class Puzzle{
   constructor(parent:Puzzle|null, board: number[][], g: number){
     this.parent = parent;
     this.board = board;
-    this.zero = FindValueAt(board, 0);
+    this.zero = util.findIndexOfValue(board, 0);
     this.g = g;
+  }
+  getBoard(){
+    return this.board;
+  }
+  getPossibleMove(){
+    const [y, x] = this.zero;
+    const h = this.board.length;
+    const w = this.board[0].length;
+    const res = new Set<Direction>();
+    if(x > 0)
+      res.add(Direction.Down);
+    if(x < h)
+      res.add(Direction.Up);
+    if(y > 0)
+      res.add(Direction.Right);
+    if(y < w)
+      res.add(Direction.Left);
+    return res;
+  }
+  swap(direction: Direction){
+    
   }
 }
 
@@ -28,16 +47,14 @@ class Puzzle{
 const GenRandomBoard = (h:number, w: number) =>{
   var arr = Array.from(Array(h*w).keys())
   const shuffledArr = _.shuffle(arr);
-  const res = new Array(h).fill(0).map(() => new Array(w).fill(0));
-  for(let i = 0; i < h; i++){
-    for(let j = 0; j < w; j++){
-      res[i][j] = shuffledArr[i*w+j]
-    }
-  }
+  const res = util.oneDtoTwoD(shuffledArr, h, w);
+  const board = new Puzzle(null, res, 0);
+  return board;
 }
 
 
 export {
   GenRandomBoard,
-  Puzzle
+  Puzzle,
+  Direction
 }
