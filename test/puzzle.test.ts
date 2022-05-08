@@ -1,6 +1,6 @@
 import { test, expect } from '@jest/globals'
-import {Direction, GenRandomBoard, Puzzle} from "../src/puzzle";
-import * as _ from "lodash";
+import {Direction, Puzzle} from "../src/puzzle";
+import _ from "lodash";
 import * as util from "../src/util";
 
 const containsAllTiles = (board: number[][]) =>{
@@ -11,9 +11,7 @@ const containsAllTiles = (board: number[][]) =>{
 }
 
 test("gen Random puzzule", ()=>{
-  var p = GenRandomBoard(3,4)
-  console.log(p.getBoard());
-  console.log(p.getPossibleMove())
+  var p = Puzzle.GenRandomBoard(3,4)
   expect(containsAllTiles(p.getBoard())).toBe(true);
 })
 
@@ -32,10 +30,10 @@ test("Puzzle Zero At Top Left", ()=>{
   const oneDArr = Array.from(Array(12).keys());
   const twoDArr = util.oneDtoTwoD(oneDArr, 3, 4);
   const p = new Puzzle(null, twoDArr, 0);
-  const targetSet = new Set<Direction>();
-  targetSet.add(Direction.Left);
-  targetSet.add(Direction.Up);
+  const targetSet = new Map<Direction, number[]>();
+  targetSet.set(Direction.Left, [0,1]);
+  targetSet.set(Direction.Up, [1,0]);
   expect(containsAllTiles(p.getBoard())).toBe(true);
   expect(p.getPossibleMove()).toEqual(targetSet);
-  expect(p.zero).toEqual([0,0]);
+  expect(p.getZero()).toEqual([0,0]);
 })

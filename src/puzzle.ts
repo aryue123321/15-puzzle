@@ -10,10 +10,10 @@ enum Direction {
 
 
 class Puzzle{
-  parent: Puzzle|null
-  board: number[][]
-  zero: number[]
-  g: number
+  private parent: Puzzle|null
+  private board: number[][]
+  private zero: number[]
+  private g: number
   constructor(parent:Puzzle|null, board: number[][], g: number){
     this.parent = parent;
     this.board = board;
@@ -23,38 +23,65 @@ class Puzzle{
   getBoard(){
     return this.board;
   }
+  getOneDBoard(){
+    return util.twoDtoOneD(this.board);
+  }
   getPossibleMove(){
-    const [y, x] = this.zero;
+    const [x0, y0] = this.zero;
     const h = this.board.length;
     const w = this.board[0].length;
-    const res = new Set<Direction>();
-    if(x > 0)
-      res.add(Direction.Down);
-    if(x < h)
-      res.add(Direction.Up);
-    if(y > 0)
-      res.add(Direction.Right);
-    if(y < w)
-      res.add(Direction.Left);
+    const res = new Map<Direction, number[]>();
+    if(x0 < h-1)
+      res.set(Direction.Up, [x0+1, y0]);
+    if(x0 > 0)
+      res.set(Direction.Down, [x0-1, y0]);
+    if(y0 < w-1)
+      res.set(Direction.Left, [x0, y0+1]);
+    if(y0 > 0)
+      res.set(Direction.Right, [x0, y0-1]);
     return res;
   }
   swap(direction: Direction){
-    
+    const possibleMoves = this.getPossibleMove();
+    if(!possibleMoves.has(direction))
+      throw "invalid move";
+    const newBoard = _.cloneDeep(this.getBoard());
+    const [x0, y0] = this.zero;
+    const [xv, yx] = possibleMoves.get(direction);
+    newBoard[x0][y0] = newBoard[xv][yx];
+    newBoard[xv][yx] = 0;
+    return new Puzzle(this, newBoard, this.g+1);
   }
-}
+  swapByIndex(i:number, j:number){
+    const [x0, y0] = this.zero;
+    if(i == x0+1 && y0 == j)
+      return this.swap(Direction.Up);
+    if(i == x0-1 && y0 == j)
+      return this.swap(Direction.Down);
+    if(i == x0 && y0+1 == j)
+      return this.swap(Direction.Left);
+    if(i == x0 && y0-1 == j)
+      return this.swap(Direction.Right);
+    return false;
+  }
+  swapByValue(value: number){
+    const [x, y] = util.findIndexOfValue(this.board, value);
+    return this.swapByIndex(x, y);
+  }
 
+  getZero(){
+    return this.zero;
+  }
 
-const GenRandomBoard = (h:number, w: number) =>{
-  var arr = Array.from(Array(h*w).keys())
-  const shuffledArr = _.shuffle(arr);
-  const res = util.oneDtoTwoD(shuffledArr, h, w);
-  const board = new Puzzle(null, res, 0);
-  return board;
+  public static GenRandomBoard = (h:number, w: number) =>{
+    const board = util.genSolvabled2D(h, w);
+    const puzzle = new Puzzle(null, board, 0);
+    return puzzle;
+  }
 }
 
 
 export {
-  GenRandomBoard,
   Puzzle,
   Direction
 }
