@@ -1,6 +1,7 @@
 import _ from "lodash";
 
-const IsSolvable = (arr: number[]) => {
+const IsSolvable = (twoDArr: number[][]) => {
+  const arr = twoDtoOneD(twoDArr);
   const len = arr.length;
   let count = 0;
   for(let i = 0; i < len - 1; i++){
@@ -9,7 +10,13 @@ const IsSolvable = (arr: number[]) => {
         count++;
     }
   }
-  return count % 2 === 0;
+  if(arr.length %2 === 1)
+    count % 2 === 0
+  const [x0, y0] = findIndexOfValue(twoDArr, 0);
+  debugger
+  if((twoDArr.length-1 - x0) % 2 == 0) //odd row from bottom
+    return count % 2 === 0
+  return count % 2 === 1;
 }
 
 const oneDtoTwoD = (oneDArr: number[], h:number, w: number) => {
@@ -40,7 +47,8 @@ const genSolvabled2D = (h: number, w: number) => {
     let arr = Array.from(Array(h*w).keys())
     shuffledArr = _.shuffle(arr);
   }
-  while(!IsSolvable(shuffledArr))
+  while(!IsSolvable(oneDtoTwoD(shuffledArr, h, w)))
+  debugger
   return oneDtoTwoD(shuffledArr, h, w);
 }
 

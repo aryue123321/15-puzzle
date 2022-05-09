@@ -73,6 +73,16 @@ class Puzzle{
     return this.zero;
   }
 
+  getScore(){
+    return this.g;
+  }
+  hasWon(){
+    const current = this.getOneDBoard();
+    const target = Array.from(Array(current.length).keys()).map(x=>x+1);
+    target[target.length-1] = 0;
+    return _.isEqual(current, target);
+  }
+
   public static GenRandomBoard = (h:number, w: number) =>{
     const board = util.genSolvabled2D(h, w);
     const puzzle = new Puzzle(null, board, 0);

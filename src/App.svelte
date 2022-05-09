@@ -3,7 +3,13 @@
 </script>
 
 <main>
-	<Board></Board>
+	<div class="container">
+		<div class="columns is-centered">
+			<div class="column is-half">
+				<Board></Board>
+			</div>
+		</div>
+	</div>
 </main>
 
 <style>

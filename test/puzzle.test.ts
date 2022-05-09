@@ -1,6 +1,6 @@
 import { test, expect } from '@jest/globals'
 import {Direction, Puzzle} from "../src/puzzle";
-import _ from "lodash";
+import * as _ from "lodash";
 import * as util from "../src/util";
 
 const containsAllTiles = (board: number[][]) =>{
