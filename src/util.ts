@@ -13,7 +13,6 @@ const IsSolvable = (twoDArr: number[][]) => {
   if(arr.length %2 === 1)
     count % 2 === 0
   const [x0, y0] = findIndexOfValue(twoDArr, 0);
-  debugger
   if((twoDArr.length-1 - x0) % 2 == 0) //odd row from bottom
     return count % 2 === 0
   return count % 2 === 1;
@@ -47,9 +46,14 @@ const genSolvabled2D = (h: number, w: number) => {
     let arr = Array.from(Array(h*w).keys())
     shuffledArr = _.shuffle(arr);
   }
-  while(!IsSolvable(oneDtoTwoD(shuffledArr, h, w)))
-  debugger
+  while(!IsSolvable(oneDtoTwoD(shuffledArr, h, w)) || iftargetReached(shuffledArr))
   return oneDtoTwoD(shuffledArr, h, w);
+}
+
+const iftargetReached = (arr: number[]) =>{
+  const target = Array.from(Array(arr.length).keys()).map(x=>x+1);
+    target[target.length-1] = 0;
+    return _.isEqual(arr, target);
 }
 
 const findIndexOfValue = (board:number[][], value:number) =>{
@@ -69,5 +73,6 @@ export {
   twoDtoOneD,
   genSolvabled2D, 
   findIndexOfValue,
-  IsSolvable
+  IsSolvable,
+  iftargetReached
 }

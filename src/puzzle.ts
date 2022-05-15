@@ -23,6 +23,9 @@ class Puzzle{
   getBoard(){
     return this.board;
   }
+  getParent(){
+    return this.parent
+  }
   getOneDBoard(){
     return util.twoDtoOneD(this.board);
   }
@@ -42,6 +45,9 @@ class Puzzle{
     return res;
   }
   swap(direction: Direction){
+    if(this.hasWon()){
+      return this;
+    }
     const possibleMoves = this.getPossibleMove();
     if(!possibleMoves.has(direction))
       throw "invalid move";
@@ -78,15 +84,19 @@ class Puzzle{
   }
   hasWon(){
     const current = this.getOneDBoard();
-    const target = Array.from(Array(current.length).keys()).map(x=>x+1);
-    target[target.length-1] = 0;
-    return _.isEqual(current, target);
+    return util.iftargetReached(current);
   }
 
   public static GenRandomBoard = (h:number, w: number) =>{
     const board = util.genSolvabled2D(h, w);
     const puzzle = new Puzzle(null, board, 0);
     return puzzle;
+  }
+  getDimenions(){
+    return {
+      h: this.board.length,
+      w: this.board[0].length
+    }
   }
 }
 
