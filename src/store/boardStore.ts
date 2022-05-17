@@ -1,8 +1,8 @@
 import { writable } from "svelte/store";
 import { Puzzle, Direction } from "../puzzle";
 
-const h = 2;
-const w = 2
+const h = 4;
+const w = 4;
 
 const createPuzzleHistory = () =>{
   const { subscribe, set, update } = writable<Puzzle|null>(Puzzle.GenRandomBoard(h, w));

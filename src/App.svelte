@@ -5,15 +5,18 @@
 </script>
 <div class="outer">
 	<main class="main">
+		
 		<div class="container">
 			<div class="columns is-centered">
 				<div class="column is-half">
+					
 					<Board>
 						<svelte:fragment slot="setting-button">
-							<div>
+							<div class="is-flex">
+								<a style="margin:auto" href="https://github.com/aryue123321/15-puzzle"><img class="image is-32x32" width="80px" alt="git-logo" src="/GitHub-Mark-64px.png"></a>
 								<button 
 									on:click="{()=>openSettings = true}"
-									class="button is-info"
+									class="button is-info ml-1"
 									>Settings
 								</button>
 							</div>
